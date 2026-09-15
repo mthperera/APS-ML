@@ -1,0 +1,1418 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Análise exploratória e pré-processamento do Stroke Prediction Dataset (APS de Machine Learning, Insper)">
+      
+      
+      
+        <link rel="canonical" href="https://mthperera.github.io/APS-ML/eda/">
+      
+      
+        <link rel="prev" href="../dataset/">
+      
+      
+        <link rel="next" href="../preprocessing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Análise exploratória - Stroke Prediction — Projeto de Machine Learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#analise-exploratoria" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Stroke Prediction — Projeto de Machine Learning" class="md-header__button md-logo" aria-label="Stroke Prediction — Projeto de Machine Learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Stroke Prediction — Projeto de Machine Learning
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Análise exploratória
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-orange"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="deep-orange"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mthperera/APS-ML" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mthperera/APS-ML
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../dataset/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Dataset
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Análise exploratória
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../preprocessing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Pré-processamento
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Stroke Prediction — Projeto de Machine Learning" class="md-nav__button md-logo" aria-label="Stroke Prediction — Projeto de Machine Learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Stroke Prediction — Projeto de Machine Learning
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mthperera/APS-ML" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mthperera/APS-ML
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Análise exploratória
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Análise exploratória
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tarefa-1-carregamento-e-inspecao-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tarefa 1 — Carregamento e inspeção inicial
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tarefa-2-analise-univariada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tarefa 2 — Análise univariada
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tarefa 2 — Análise univariada">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estatisticas-descritivas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estatísticas descritivas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glicose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glicose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#imc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IMC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variaveis-categoricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variáveis categóricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tarefa-3-analise-bivariada-e-multivariada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tarefa 3 — Análise bivariada e multivariada
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tarefa 3 — Análise bivariada e multivariada">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#correlacoes-entre-variaveis-numericas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correlações entre variáveis numéricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variaveis-categoricas-target" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variáveis categóricas × target
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controlando-a-idade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controlando a idade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variaveis-numericas-target" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variáveis numéricas × target
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glicose-e-imc-em-faixas-clinicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glicose e IMC em faixas clínicas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipo-de-trabalho" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipo de trabalho
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabagismo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tabagismo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusões
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preprocessing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pré-processamento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tarefa-1-carregamento-e-inspecao-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tarefa 1 — Carregamento e inspeção inicial
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tarefa-2-analise-univariada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tarefa 2 — Análise univariada
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tarefa 2 — Análise univariada">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estatisticas-descritivas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estatísticas descritivas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#idade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Idade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glicose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glicose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#imc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IMC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variaveis-categoricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variáveis categóricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tarefa-3-analise-bivariada-e-multivariada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tarefa 3 — Análise bivariada e multivariada
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tarefa 3 — Análise bivariada e multivariada">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#correlacoes-entre-variaveis-numericas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correlações entre variáveis numéricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variaveis-categoricas-target" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variáveis categóricas × target
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#controlando-a-idade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controlando a idade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variaveis-numericas-target" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variáveis numéricas × target
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glicose-e-imc-em-faixas-clinicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glicose e IMC em faixas clínicas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tipo-de-trabalho" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipo de trabalho
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tabagismo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tabagismo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusões
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="analise-exploratoria">Análise exploratória<a class="headerlink" href="#analise-exploratoria" title="Permanent link">&para;</a></h1>
+<p>Resultados das tarefas 1 a 3 da APS1. O código completo está no <a href="https://github.com/mthperera/APS-ML/blob/main/notebooks/01_eda.ipynb">notebook 01</a>. Todas as análises abaixo usam <strong>somente o conjunto de treino</strong> (4.087 pacientes, 199 casos de AVC); o teste não é olhado.</p>
+<p>Convenção de cores dos gráficos: <strong>azul</strong> é paciente sem AVC, <strong>laranja</strong> é paciente com AVC (ou taxa de AVC) e <strong>violeta</strong> é o treino inteiro. Como o target é desbalanceado, as comparações entre grupos usam a <strong>taxa de AVC</strong> (% do grupo que teve AVC), não a contagem de casos.</p>
+<h2 id="tarefa-1-carregamento-e-inspecao-inicial">Tarefa 1 — Carregamento e inspeção inicial<a class="headerlink" href="#tarefa-1-carregamento-e-inspecao-inicial" title="Permanent link">&para;</a></h2>
+<p>O que foi feito, com os resultados detalhados na página <a href="../dataset/">Dataset</a>:</p>
+<ul>
+<li>descrição de cada feature e de seus valores possíveis;</li>
+<li>verificação de dimensões (5.110 × 12), tipos de dado e valores únicos;</li>
+<li>valores ausentes (só o IMC, 3,9%), ausência disfarçada (tabagismo desconhecido, 30%), duplicatas (nenhuma) e regras de consistência entre colunas;</li>
+<li>desbalanceamento do target (4,9% de AVC);</li>
+<li>split 80/20 estratificado, feito antes das demais análises para evitar vazamento de informação do teste.</li>
+</ul>
+<h2 id="tarefa-2-analise-univariada">Tarefa 2 — Análise univariada<a class="headerlink" href="#tarefa-2-analise-univariada" title="Permanent link">&para;</a></h2>
+<h3 id="estatisticas-descritivas">Estatísticas descritivas<a class="headerlink" href="#estatisticas-descritivas" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Média</th>
+<th>Mediana</th>
+<th>Desvio padrão</th>
+<th>Mínimo</th>
+<th>Máximo</th>
+<th>Assimetria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Idade (anos)</td>
+<td>43,26</td>
+<td>45,00</td>
+<td>22,64</td>
+<td>0,08</td>
+<td>82,00</td>
+<td>−0,14</td>
+</tr>
+<tr>
+<td>Glicose média (mg/dL)</td>
+<td>105,90</td>
+<td>91,89</td>
+<td>44,68</td>
+<td>55,22</td>
+<td>271,74</td>
+<td>1,58</td>
+</tr>
+<tr>
+<td>IMC (kg/m²)</td>
+<td>28,88</td>
+<td>28,10</td>
+<td>7,90</td>
+<td>10,30</td>
+<td>97,60</td>
+<td>1,12</td>
+</tr>
+</tbody>
+</table>
+<p>A idade é simétrica. Glicose e IMC têm cauda à direita: a média fica acima da mediana e a assimetria é positiva, mais forte na glicose. As escalas são muito diferentes (idade até 82, glicose até 272), o que vai exigir padronização.</p>
+<p>Outliers pelo critério IQR (valores além de 1,5 vez o intervalo interquartil): idade 0, glicose 489 (12% do treino), IMC 86 (2,2%).</p>
+<h3 id="idade">Idade<a class="headerlink" href="#idade" title="Permanent link">&para;</a></h3>
+<p><img alt="Distribuição da idade" src="../img/age_distribution.png" /></p>
+<p>Cobre toda a faixa de 0 a 82 anos, sem outliers. Há um acúmulo de bebês com menos de 2 anos e um pico em 80–82 anos, que sugere idades maiores registradas como 82. Não precisa de tratamento.</p>
+<h3 id="glicose">Glicose<a class="headerlink" href="#glicose" title="Permanent link">&para;</a></h3>
+<p><img alt="Distribuição da glicose" src="../img/glucose_distribution.png" /></p>
+<p>Distribuição <strong>bimodal</strong>: a maioria dos pacientes fica entre 60 e 130, e há um segundo grupo em torno de 200, compatível com diabetes. Os 489 outliers são exatamente esse grupo, e a taxa de AVC entre eles é de <strong>13,5%</strong>, o triplo da taxa geral. Removê-los apagaria um sinal de risco; a decisão é mantê-los e reduzir a assimetria com transformação logarítmica.</p>
+<h3 id="imc">IMC<a class="headerlink" href="#imc" title="Permanent link">&para;</a></h3>
+<p><img alt="Distribuição do IMC" src="../img/bmi_distribution.png" /></p>
+<p>Quase simétrico em torno de 28, com cauda à direita. Dos 86 outliers, 12 passam de 60 (até 97,6) e são provavelmente erros de registro. Os 34 valores abaixo de 15 são de crianças (idade mediana de 4,5 anos) e são plausíveis. A decisão é limitar os valores extremos a 60, sem remover pacientes.</p>
+<h3 id="variaveis-categoricas">Variáveis categóricas<a class="headerlink" href="#variaveis-categoricas" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Categoria</th>
+<th>Pacientes</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hypertension</td>
+<td>0 / 1</td>
+<td>3.700 / 387</td>
+<td>90,5 / 9,5</td>
+</tr>
+<tr>
+<td>heart_disease</td>
+<td>0 / 1</td>
+<td>3.855 / 232</td>
+<td>94,3 / 5,7</td>
+</tr>
+<tr>
+<td>gender</td>
+<td>Female / Male</td>
+<td>2.397 / 1.690</td>
+<td>58,6 / 41,4</td>
+</tr>
+<tr>
+<td>ever_married</td>
+<td>Yes / No</td>
+<td>2.697 / 1.390</td>
+<td>66,0 / 34,0</td>
+</tr>
+<tr>
+<td>work_type</td>
+<td>Private / Self-employed / children / Govt_job / Never_worked</td>
+<td>2.324 / 664 / 555 / 528 / 16</td>
+<td>56,9 / 16,2 / 13,6 / 12,9 / 0,4</td>
+</tr>
+<tr>
+<td>Residence_type</td>
+<td>Urban / Rural</td>
+<td>2.054 / 2.033</td>
+<td>50,3 / 49,7</td>
+</tr>
+<tr>
+<td>smoking_status</td>
+<td>never smoked / Unknown / formerly smoked / smokes</td>
+<td>1.520 / 1.236 / 715 / 616</td>
+<td>37,2 / 30,2 / 17,5 / 15,1</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Frequência do status de tabagismo" src="../img/smoking_status_frequency.png" /></p>
+<p>O status desconhecido é a segunda categoria mais frequente (30%). Imputar pela moda transformaria um terço dos pacientes em não fumantes, então a categoria será mantida.</p>
+<p><img alt="Frequência do tipo de trabalho" src="../img/work_type_frequency.png" /></p>
+<p>Mais da metade dos pacientes trabalha no setor privado. A categoria de crianças descreve idade, não profissão; quem nunca trabalhou são só 16 pacientes, poucos para estimar uma taxa confiável.</p>
+<p><img alt="Variáveis binárias" src="../img/binary_variables.png" /></p>
+<p>Hipertensão (9,5%) e doença cardíaca (5,7%) são minoritárias. Residência é meio a meio, há leve maioria feminina e dois terços já foram casados. Nenhuma categoria é rara demais para virar uma coluna 0/1.</p>
+<h2 id="tarefa-3-analise-bivariada-e-multivariada">Tarefa 3 — Análise bivariada e multivariada<a class="headerlink" href="#tarefa-3-analise-bivariada-e-multivariada" title="Permanent link">&para;</a></h2>
+<h3 id="correlacoes-entre-variaveis-numericas">Correlações entre variáveis numéricas<a class="headerlink" href="#correlacoes-entre-variaveis-numericas" title="Permanent link">&para;</a></h3>
+<p><img alt="Matrizes de correlação" src="../img/correlation_matrices.png" /></p>
+<p>Pearson mede relação linear; Spearman usa a ordem dos valores e é robusta a outliers. Comparar as duas mostra quais correlações dependem dos extremos.</p>
+<ul>
+<li><strong>Não há correlação forte entre features:</strong> o maior valor é 0,33 (idade e IMC), então não há multicolinearidade.</li>
+<li><strong>A idade é a variável mais associada ao AVC</strong> (0,24), seguida de hipertensão (0,14), glicose (0,13) e doença cardíaca (0,12). O IMC quase não se relaciona (0,05).</li>
+<li><strong>A idade se correlaciona com quase todas as outras variáveis</strong> (hipertensão 0,27, doença cardíaca 0,27, IMC 0,33), o que a torna uma provável confundidora.</li>
+<li><strong>Em Spearman, a correlação de glicose com AVC cai de 0,13 para 0,07:</strong> a associação vem do grupo com glicose muito alta, não de um aumento gradual.</li>
+</ul>
+<p><img alt="Idade × glicose por ocorrência de AVC" src="../img/age_vs_glucose.png" /></p>
+<p>Os casos de AVC quase não aparecem antes dos 40 anos (3 dos 199) e se concentram a partir dos 60. A faixa de glicose acima de 170 tem mais AVC mesmo entre idosos. As classes se sobrepõem muito: nenhuma fronteira simples as separa.</p>
+<p><img alt="Idade × IMC por ocorrência de AVC" src="../img/age_vs_bmi.png" /></p>
+<p>O IMC cresce com a idade só até a adolescência; entre adultos a correlação é praticamente zero (0,03). Os casos de AVC se espalham por toda a faixa usual de IMC.</p>
+<p><img alt="Glicose × IMC por ocorrência de AVC" src="../img/glucose_vs_bmi.png" /></p>
+<p>Glicose e IMC quase não se relacionam (correlação de 0,16): o grupo de glicose alta tem IMC espalhado por toda a faixa. Os casos de AVC aparecem nos dois grupos de glicose e em qualquer IMC, então as duas variáveis juntas não formam uma fronteira clara.</p>
+<h3 id="variaveis-categoricas-target">Variáveis categóricas × target<a class="headerlink" href="#variaveis-categoricas-target" title="Permanent link">&para;</a></h3>
+<p>Taxa de AVC de cada categoria e força da associação com o target, medida pelo teste qui-quadrado e pelo V de Cramér (0 = nenhuma associação, 1 = associação perfeita):</p>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Taxa de AVC por categoria</th>
+<th>V de Cramér</th>
+<th>p-valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hypertension</td>
+<td>sem 3,9% · com <strong>14,0%</strong></td>
+<td>0,135</td>
+<td>&lt; 0,001</td>
+</tr>
+<tr>
+<td>heart_disease</td>
+<td>sem 4,2% · com <strong>15,5%</strong></td>
+<td>0,119</td>
+<td>&lt; 0,001</td>
+</tr>
+<tr>
+<td>ever_married</td>
+<td>nunca casou 1,7% · já casou 6,5%</td>
+<td>0,106</td>
+<td>&lt; 0,001</td>
+</tr>
+<tr>
+<td>work_type</td>
+<td>crianças 0,2% · nunca trabalhou 0,0% · privado 4,9% · público 5,3% · autônomo 8,3%</td>
+<td>0,104</td>
+<td>&lt; 0,001</td>
+</tr>
+<tr>
+<td>smoking_status</td>
+<td>desconhecido 3,1% · nunca fumou 4,7% · fuma 5,5% · ex-fumante 7,8%</td>
+<td>0,075</td>
+<td>&lt; 0,001</td>
+</tr>
+<tr>
+<td>Residence_type</td>
+<td>rural 4,5% · urbana 5,3%</td>
+<td>0,017</td>
+<td>0,276</td>
+</tr>
+<tr>
+<td>gender</td>
+<td>feminino 4,7% · masculino 5,1%</td>
+<td>0,010</td>
+<td>0,534</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Taxa de AVC por categoria" src="../img/stroke_rate_by_category.png" /></p>
+<p>Todas as associações são significativas, exceto gênero e tipo de residência. As mais fortes são hipertensão e doença cardíaca, mas mesmo essas são fracas (V abaixo de 0,15), o que antecipa a dificuldade da classificação.</p>
+<h3 id="controlando-a-idade">Controlando a idade<a class="headerlink" href="#controlando-a-idade" title="Permanent link">&para;</a></h3>
+<p>A idade é o fator mais ligado ao AVC e também varia muito entre as categorias (crianças nunca casaram, autônomos são mais velhos). Para separar os efeitos, a taxa de AVC é comparada <strong>dentro de cada faixa etária</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Categoria</th>
+<th>Até 40 anos</th>
+<th>41 a 60 anos</th>
+<th>Mais de 60 anos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hypertension</td>
+<td>sem</td>
+<td>0,1%</td>
+<td>4,0%</td>
+<td>11,8%</td>
+</tr>
+<tr>
+<td></td>
+<td>com</td>
+<td>2,9%</td>
+<td><strong>9,0%</strong></td>
+<td><strong>18,8%</strong></td>
+</tr>
+<tr>
+<td>heart_disease</td>
+<td>sem</td>
+<td>0,2%</td>
+<td>4,4%</td>
+<td>12,5%</td>
+</tr>
+<tr>
+<td></td>
+<td>com</td>
+<td>0,0%</td>
+<td><strong>9,8%</strong></td>
+<td><strong>17,3%</strong></td>
+</tr>
+<tr>
+<td>ever_married</td>
+<td>nunca casou</td>
+<td>0,2%</td>
+<td>4,8%</td>
+<td>20,0%</td>
+</tr>
+<tr>
+<td></td>
+<td>já casou</td>
+<td>0,2%</td>
+<td>4,6%</td>
+<td>12,7%</td>
+</tr>
+<tr>
+<td>work_type</td>
+<td>privado</td>
+<td>0,1%</td>
+<td>5,0%</td>
+<td>14,0%</td>
+</tr>
+<tr>
+<td></td>
+<td>público</td>
+<td>0,0%</td>
+<td>4,1%</td>
+<td>12,1%</td>
+</tr>
+<tr>
+<td></td>
+<td>autônomo</td>
+<td>1,1%</td>
+<td>3,4%</td>
+<td>12,7%</td>
+</tr>
+<tr>
+<td>smoking_status</td>
+<td>nunca fumou</td>
+<td>0,0%</td>
+<td>3,6%</td>
+<td>13,2%</td>
+</tr>
+<tr>
+<td></td>
+<td>ex-fumante</td>
+<td>0,6%</td>
+<td>4,2%</td>
+<td>14,7%</td>
+</tr>
+<tr>
+<td></td>
+<td>fuma</td>
+<td>0,5%</td>
+<td>6,6%</td>
+<td>11,6%</td>
+</tr>
+<tr>
+<td></td>
+<td>desconhecido</td>
+<td>0,1%</td>
+<td>4,8%</td>
+<td>12,7%</td>
+</tr>
+</tbody>
+</table>
+<p>Dentro de cada faixa, as diferenças de estado civil, tipo de trabalho e tabagismo praticamente desaparecem; as de hipertensão e doença cardíaca permanecem.</p>
+<p><img alt="Taxa de AVC por faixa etária e estado civil" src="../img/stroke_rate_marriage_by_age.png" /></p>
+<p>Casados e não casados têm a mesma taxa dentro de cada faixa, e acima dos 60 anos a relação até se inverte. A diferença geral (6,5% contra 1,7%) vem da idade: mediana de 54 anos entre casados e 18 entre os demais. É um exemplo do <strong>paradoxo de Simpson</strong>: uma associação que aparece no agregado e some (ou inverte) nos subgrupos.</p>
+<p><img alt="Taxa de AVC por faixa etária, hipertensão e doença cardíaca" src="../img/stroke_rate_hypertension_heart_by_age.png" /></p>
+<p>Hipertensão e doença cardíaca elevam a taxa em todas as faixas: entre 41 e 60 anos ela dobra, e acima dos 60 sobe de 12% para 17% a 19%. São fatores de risco próprios, além da idade.</p>
+<h3 id="variaveis-numericas-target">Variáveis numéricas × target<a class="headerlink" href="#variaveis-numericas-target" title="Permanent link">&para;</a></h3>
+<p><img alt="Numéricas por ocorrência de AVC" src="../img/numeric_by_stroke.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Mediana com AVC</th>
+<th>Mediana sem AVC</th>
+<th>p-valor (Mann-Whitney)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Idade</td>
+<td>70,0</td>
+<td>43,0</td>
+<td>&lt; 0,001</td>
+</tr>
+<tr>
+<td>Glicose</td>
+<td>104,9</td>
+<td>91,6</td>
+<td>&lt; 0,001</td>
+</tr>
+<tr>
+<td>IMC</td>
+<td>29,9</td>
+<td>27,9</td>
+<td>&lt; 0,001</td>
+</tr>
+</tbody>
+</table>
+<p>A idade é o que mais separa as classes. A glicose muda pouco na mediana, mas o quartil superior dos casos de AVC chega a 195, e um terço deles está acima de 170. O IMC quase não muda. O teste de Mann-Whitney (não paramétrico, adequado a distribuições assimétricas) confirma diferença significativa nas três, mas com magnitudes muito diferentes.</p>
+<h3 id="glicose-e-imc-em-faixas-clinicas">Glicose e IMC em faixas clínicas<a class="headerlink" href="#glicose-e-imc-em-faixas-clinicas" title="Permanent link">&para;</a></h3>
+<p>Taxa de AVC por faixa de glicose e faixa etária:</p>
+<table>
+<thead>
+<tr>
+<th>Glicose (mg/dL)</th>
+<th>Até 40 anos</th>
+<th>41 a 60 anos</th>
+<th>Mais de 60 anos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>até 100</td>
+<td>0,3%</td>
+<td>3,5%</td>
+<td>11,0%</td>
+</tr>
+<tr>
+<td>100 a 126</td>
+<td>0,0%</td>
+<td>3,9%</td>
+<td>11,7%</td>
+</tr>
+<tr>
+<td>126 a 170</td>
+<td>0,0%</td>
+<td>4,4%</td>
+<td>16,7%</td>
+</tr>
+<tr>
+<td>acima de 170</td>
+<td>0,0%</td>
+<td><strong>10,4%</strong></td>
+<td><strong>18,5%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Controlando a idade, a glicose acima de 170 ainda eleva o risco: triplica entre 41 e 60 anos e sobe 7 pontos acima dos 60.</p>
+<p>Taxa de AVC por faixa de IMC (classificação da OMS), só adultos:</p>
+<table>
+<thead>
+<tr>
+<th>Faixa de IMC</th>
+<th>Pacientes</th>
+<th>Taxa de AVC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abaixo do peso (&lt; 18,5)</td>
+<td>34</td>
+<td>2,9%</td>
+</tr>
+<tr>
+<td>normal (18,5 a 25)</td>
+<td>699</td>
+<td>4,1%</td>
+</tr>
+<tr>
+<td>sobrepeso (25 a 30)</td>
+<td>1.050</td>
+<td>5,1%</td>
+</tr>
+<tr>
+<td>obesidade (≥ 30)</td>
+<td>1.473</td>
+<td>5,3%</td>
+</tr>
+</tbody>
+</table>
+<p>Só um leve aumento com o peso, coerente com a correlação quase nula.</p>
+<h3 id="tipo-de-trabalho">Tipo de trabalho<a class="headerlink" href="#tipo-de-trabalho" title="Permanent link">&para;</a></h3>
+<p><img alt="Idade por tipo de trabalho" src="../img/age_by_work_type.png" /></p>
+<p>Ordenadas pela idade mediana, as categorias ficam também ordenadas pela taxa de AVC: crianças e quem nunca trabalhou são jovens e quase não têm AVC; autônomos são os mais velhos (mediana 63) e têm a maior taxa. Boa parte da variação do tipo de trabalho é idade.</p>
+<h3 id="tabagismo">Tabagismo<a class="headerlink" href="#tabagismo" title="Permanent link">&para;</a></h3>
+<p><img alt="Idade por status de tabagismo" src="../img/age_by_smoking_status.png" /></p>
+<p>O grupo com status desconhecido é o mais jovem (mediana 22 anos): 90% das crianças estão nele, porque a pergunta não se aplica a elas. A maior taxa entre ex-fumantes acompanha a idade, já que é o grupo mais velho (mediana 57). O status desconhecido carrega informação (paciente jovem, risco baixo) e será mantido como categoria própria.</p>
+<h2 id="conclusoes">Conclusões<a class="headerlink" href="#conclusoes" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Só 4,9% dos pacientes tiveram AVC; a acurácia não serve como métrica.</li>
+<li>A idade é o fator dominante: mediana de 70 anos entre os casos e só 3 casos abaixo de 40.</li>
+<li>Hipertensão, doença cardíaca e glicose acima de 170 elevam o risco mesmo dentro da mesma faixa etária.</li>
+<li>Os outliers de glicose são um grupo real, com o triplo da taxa de AVC: devem ser mantidos.</li>
+<li>Estado civil, tipo de trabalho e parte do tabagismo só parecem ligados ao AVC por causa da idade.</li>
+<li>IMC, gênero e tipo de residência trazem pouca informação.</li>
+<li>O IMC ausente e o tabagismo desconhecido não são aleatórios: devem virar informação, não ser descartados.</li>
+<li>Nenhuma variável separa as classes sozinha; todas as associações são fracas.</li>
+</ol>
+<p>Cada uma dessas conclusões vira uma decisão na página de <a href="../preprocessing/">Pré-processamento</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

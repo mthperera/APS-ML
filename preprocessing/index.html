@@ -1,0 +1,1291 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Análise exploratória e pré-processamento do Stroke Prediction Dataset (APS de Machine Learning, Insper)">
+      
+      
+      
+        <link rel="canonical" href="https://mthperera.github.io/APS-ML/preprocessing/">
+      
+      
+        <link rel="prev" href="../eda/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Pré-processamento - Stroke Prediction — Projeto de Machine Learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pre-processamento" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Stroke Prediction — Projeto de Machine Learning" class="md-header__button md-logo" aria-label="Stroke Prediction — Projeto de Machine Learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Stroke Prediction — Projeto de Machine Learning
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Pré-processamento
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-orange"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="deep-orange"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mthperera/APS-ML" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mthperera/APS-ML
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../dataset/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Dataset
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../eda/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Análise exploratória
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Pré-processamento
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Stroke Prediction — Projeto de Machine Learning" class="md-nav__button md-logo" aria-label="Stroke Prediction — Projeto de Machine Learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Stroke Prediction — Projeto de Machine Learning
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mthperera/APS-ML" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mthperera/APS-ML
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Análise exploratória
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pré-processamento
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pré-processamento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-valores-ausentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Valores ausentes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-outliers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Outliers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-encoding-das-variaveis-categoricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Encoding das variáveis categóricas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-padronizacao-das-variaveis-numericas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Padronização das variáveis numéricas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-reducao-de-dimensionalidade-pca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Redução de dimensionalidade (PCA)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-analise-dos-resultados-do-pca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Análise dos resultados do PCA
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Análise dos resultados do PCA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#separabilidade-das-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Separabilidade das classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#importancia-das-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Importância das features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-pipeline-de-pre-processamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Pipeline de pré-processamento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-das-decisoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumo das decisões
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saidas-geradas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saídas geradas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-valores-ausentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Valores ausentes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-outliers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Outliers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-encoding-das-variaveis-categoricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Encoding das variáveis categóricas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-padronizacao-das-variaveis-numericas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Padronização das variáveis numéricas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-reducao-de-dimensionalidade-pca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Redução de dimensionalidade (PCA)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-analise-dos-resultados-do-pca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Análise dos resultados do PCA
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Análise dos resultados do PCA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#separabilidade-das-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Separabilidade das classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#importancia-das-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Importância das features
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-pipeline-de-pre-processamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Pipeline de pré-processamento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-das-decisoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumo das decisões
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saidas-geradas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saídas geradas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="pre-processamento">Pré-processamento<a class="headerlink" href="#pre-processamento" title="Permanent link">&para;</a></h1>
+<p>Tarefa 4 da APS1. O código completo está no <a href="https://github.com/mthperera/APS-ML/blob/main/notebooks/02_preprocessing.ipynb">notebook 02</a>. Esta página explica <strong>por que</strong> cada etapa foi feita do jeito que foi: quais alternativas existiam, qual foi escolhida e qual achado da <a href="../eda/">análise exploratória</a> sustenta a escolha.</p>
+<h2 id="1-valores-ausentes">1. Valores ausentes<a class="headerlink" href="#1-valores-ausentes" title="Permanent link">&para;</a></h2>
+<p><strong>O que o dataset tem.</strong> Só o IMC tem nulos: 163 pacientes no treino (3,9%) e 38 no teste. O tabagismo tem uma ausência disfarçada: a categoria "desconhecido", em 30% dos pacientes.</p>
+<p><strong>Alternativas consideradas.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Alternativa</th>
+<th>Por que não</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>remover as linhas sem IMC</td>
+<td>a taxa de AVC entre elas é de 19,9%, contra 4,3% no restante: 40 dos 249 casos (16%) estão nesse grupo. Removê-las descartaria uma parte grande da classe rara e enviesaria o modelo para pacientes com menos risco</td>
+</tr>
+<tr>
+<td>remover a coluna IMC</td>
+<td>perde uma variável inteira por causa de 4% de nulos</td>
+</tr>
+<tr>
+<td>imputar pela média</td>
+<td>a cauda direita do IMC (valores até 97,6) puxa a média para cima; a mediana não é afetada</td>
+</tr>
+<tr>
+<td>imputar tabagismo pela moda (nunca fumou)</td>
+<td>transformaria um terço dos pacientes em não fumantes e apagaria o sinal de que a categoria concentra crianças (90% delas)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Decisão.</strong> O IMC é imputado pela <strong>mediana do treino</strong> (28,1) e ganha uma <strong>coluna indicadora de ausência</strong>. O tabagismo desconhecido <strong>fica como categoria própria</strong>.</p>
+<p><strong>Por quê.</strong> A ausência do IMC não é aleatória: ela prevê o target. Se o valor fosse apenas imputado, essa informação se perderia; com o indicador, o modelo pode aprender que "IMC ausente" está associado a mais risco. A imputação em si quase não altera a distribuição (o desvio padrão vai de 7,90 para 7,74), porque são poucos valores e a mediana fica no centro. No tabagismo, o desconhecido carrega a informação "paciente jovem, risco baixo", que é útil para o modelo; como categoria própria, ele decide o que fazer com isso.</p>
+<h2 id="2-outliers">2. Outliers<a class="headerlink" href="#2-outliers" title="Permanent link">&para;</a></h2>
+<p><strong>O que o dataset tem.</strong> Pelo critério IQR, a glicose tem 489 outliers (12% do treino), o IMC tem 86 (2,2%) e a idade não tem nenhum.</p>
+<p><img alt="Glicose e IMC antes e depois do tratamento" src="../img/outliers_before_after.png" /></p>
+<p><strong>Alternativas consideradas.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Alternativa</th>
+<th>Por que não</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>remover os outliers de glicose</td>
+<td>eles não são erros: formam o segundo pico da distribuição bimodal, com perfil de diabetes, e têm <strong>13,5% de AVC</strong>, o triplo da taxa geral. Remover apagaria um dos sinais de risco mais fortes e 12% dos pacientes</td>
+</tr>
+<tr>
+<td>remover os outliers de IMC</td>
+<td>a maioria (IMC entre 47 e 60) é obesidade grave, plausível; só 12 valores passam de 60</td>
+</tr>
+<tr>
+<td>deixar tudo como está</td>
+<td>a assimetria da glicose (1,58) prejudica modelos sensíveis à escala, e valores de IMC como 97,6 são erros de registro que distorcem média e desvio</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Decisão.</strong> Glicose: <strong>manter todos os valores e aplicar log(1 + x)</strong>. IMC: <strong>limitar a 60</strong> (clipping). Idade: nada.</p>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Assimetria antes</th>
+<th>Assimetria depois</th>
+<th>Máximo antes</th>
+<th>Máximo depois</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Glicose</td>
+<td>1,58</td>
+<td>0,89</td>
+<td>271,7</td>
+<td>5,61 (escala log)</td>
+</tr>
+<tr>
+<td>IMC</td>
+<td>1,12</td>
+<td>0,80</td>
+<td>97,6</td>
+<td>60,0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Por quê.</strong> O logaritmo comprime a cauda direita e reduz a assimetria pela metade, mas preserva a ordem dos valores e o segundo pico, que é onde está o sinal. No IMC, valores acima de 60 são clinicamente implausíveis, mas os pacientes têm as outras variáveis válidas: o clipping mantém o paciente e elimina a influência do valor errado. Os IMCs abaixo de 15 são de crianças (idade mediana de 4,5 anos) e ficam como estão. As duas transformações são funções fixas, que não aprendem nada do treino, então não há risco de vazamento ao aplicá-las ao teste.</p>
+<h2 id="3-encoding-das-variaveis-categoricas">3. Encoding das variáveis categóricas<a class="headerlink" href="#3-encoding-das-variaveis-categoricas" title="Permanent link">&para;</a></h2>
+<p><strong>O que o dataset tem.</strong> Cinco variáveis categóricas, todas nominais (sem ordem natural), com no máximo cinco categorias cada.</p>
+<p><strong>Alternativas consideradas.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Alternativa</th>
+<th>Por que não</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>label encoding (uma coluna com 0, 1, 2, ...)</td>
+<td>inventa uma ordem que não existe: o modelo trataria "autônomo" como maior que "setor privado", e a distância entre categorias como significativa</td>
+</tr>
+<tr>
+<td>agrupar categorias raras</td>
+<td>só "nunca trabalhou" é rara (16 pacientes); agrupar com outra categoria misturaria perfis diferentes sem necessidade, já que o one-hot lida bem com ela</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Decisão.</strong> <strong>One-hot encoding</strong>, com uma única coluna para as variáveis de duas categorias e tolerância a categorias novas. Resultado: 12 colunas.</p>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Colunas geradas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gender</td>
+<td>gender_Male</td>
+</tr>
+<tr>
+<td>ever_married</td>
+<td>ever_married_Yes</td>
+</tr>
+<tr>
+<td>work_type</td>
+<td>work_type_Govt_job, work_type_Never_worked, work_type_Private, work_type_Self-employed, work_type_children</td>
+</tr>
+<tr>
+<td>Residence_type</td>
+<td>Residence_type_Urban</td>
+</tr>
+<tr>
+<td>smoking_status</td>
+<td>smoking_status_Unknown, smoking_status_formerly smoked, smoking_status_never smoked, smoking_status_smokes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Por quê.</strong> O one-hot representa cada categoria como presença ou ausência, sem impor ordem, e a baixa cardinalidade mantém o número de colunas pequeno. Nas variáveis de duas categorias, uma coluna basta (a segunda seria o complemento exato da primeira, redundância que atrapalha modelos lineares). O encoder é configurado para ignorar categorias desconhecidas em vez de falhar, o que protege a aplicação em dados novos, embora todas as categorias do teste já existam no treino.</p>
+<h2 id="4-padronizacao-das-variaveis-numericas">4. Padronização das variáveis numéricas<a class="headerlink" href="#4-padronizacao-das-variaveis-numericas" title="Permanent link">&para;</a></h2>
+<p><strong>O que o dataset tem.</strong> Três variáveis contínuas em escalas muito diferentes.</p>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Mínimo</th>
+<th>Máximo</th>
+<th>Desvio padrão</th>
+<th>% dos pacientes abaixo da metade da escala</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Idade</td>
+<td>0,1</td>
+<td>82,0</td>
+<td>22,6</td>
+<td>45%</td>
+</tr>
+<tr>
+<td>Glicose</td>
+<td>55,2</td>
+<td>271,7</td>
+<td>44,7</td>
+<td>88%</td>
+</tr>
+<tr>
+<td>IMC</td>
+<td>10,3</td>
+<td>97,6</td>
+<td>7,9</td>
+<td>95%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Alternativas consideradas.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Alternativa</th>
+<th>Por que não</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>não escalar</td>
+<td>modelos baseados em distância (KNN, SVM) ou em gradiente (regressão logística) dariam mais peso à variável de maior escala, a glicose, só por causa da unidade</td>
+</tr>
+<tr>
+<td>Min-Max (levar para 0 a 1)</td>
+<td>usa o mínimo e o máximo como referência, e os máximos de glicose e IMC são valores extremos: 88% dos pacientes ficariam na metade inferior da escala da glicose e 95% na do IMC, comprimindo quase todos os dados num intervalo pequeno</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Decisão.</strong> <strong>Padronização</strong> (StandardScaler: média 0, desvio padrão 1) nas três contínuas, calculada só no treino. As colunas 0/1 (binárias e one-hot) não são escaladas.</p>
+<p><strong>Por quê.</strong> A padronização usa média e desvio, que são muito menos sensíveis a um único valor extremo do que o máximo. Depois do log na glicose e do clipping no IMC, as distribuições ficam próximas de simétricas, e a padronização deixa as três variáveis comparáveis. As colunas 0/1 já estão numa escala comparável e padronizá-las só tornaria os coeficientes mais difíceis de interpretar.</p>
+<h2 id="5-reducao-de-dimensionalidade-pca">5. Redução de dimensionalidade (PCA)<a class="headerlink" href="#5-reducao-de-dimensionalidade-pca" title="Permanent link">&para;</a></h2>
+<p><strong>O que foi feito.</strong> PCA sobre as três contínuas (glicose com log, IMC limitado e imputado) e as duas binárias, todas padronizadas.</p>
+<p><strong>Decisões dentro do PCA e o porquê.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Decisão</th>
+<th>Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>incluir as binárias (hipertensão, doença cardíaca) além das contínuas</td>
+<td>são numéricas (0/1) e as duas features mais associadas ao AVC depois da idade; sem elas, a projeção não mostraria a estrutura que elas criam</td>
+</tr>
+<tr>
+<td>padronizar antes</td>
+<td>o PCA maximiza variância; sem padronizar, a variável de maior escala dominaria a primeira componente</td>
+</tr>
+<tr>
+<td>aplicar log e clipping antes</td>
+<td>os valores extremos de glicose e IMC puxariam as componentes para si</td>
+</tr>
+<tr>
+<td>imputar antes</td>
+<td>o PCA não aceita valores ausentes</td>
+</tr>
+<tr>
+<td>não usar o PCA para reduzir features na modelagem</td>
+<td>as variáveis são pouco correlacionadas: são necessárias quatro componentes para 88% da variância, então comprimir não ganha quase nada e perde interpretabilidade</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Variância explicada por componente" src="../img/pca_explained_variance.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Variância explicada</th>
+<th>Acumulada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PC1</td>
+<td>35,0%</td>
+<td>35,0%</td>
+</tr>
+<tr>
+<td>PC2</td>
+<td>19,5%</td>
+<td>54,5%</td>
+</tr>
+<tr>
+<td>PC3</td>
+<td>17,2%</td>
+<td>71,7%</td>
+</tr>
+<tr>
+<td>PC4</td>
+<td>16,8%</td>
+<td>88,5%</td>
+</tr>
+<tr>
+<td>PC5</td>
+<td>11,5%</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table>
+<p>As duas primeiras componentes explicam 55% da variância. Isso é pouco para cinco variáveis e confirma o que a matriz de correlação já mostrava: não há redundância entre as features, cada uma traz informação própria.</p>
+<h2 id="6-analise-dos-resultados-do-pca">6. Análise dos resultados do PCA<a class="headerlink" href="#6-analise-dos-resultados-do-pca" title="Permanent link">&para;</a></h2>
+<h3 id="separabilidade-das-classes">Separabilidade das classes<a class="headerlink" href="#separabilidade-das-classes" title="Permanent link">&para;</a></h3>
+<p><img alt="Projeção nas duas primeiras componentes" src="../img/pca_projection.png" /></p>
+<table>
+<thead>
+<tr>
+<th>Faixa de PC1</th>
+<th>Pacientes</th>
+<th>Taxa de AVC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>até −1</td>
+<td>917</td>
+<td>0,1%</td>
+</tr>
+<tr>
+<td>−1 a 0</td>
+<td>1.346</td>
+<td>1,7%</td>
+</tr>
+<tr>
+<td>0 a 1</td>
+<td>995</td>
+<td>6,6%</td>
+</tr>
+<tr>
+<td>1 a 2</td>
+<td>490</td>
+<td>10,0%</td>
+</tr>
+<tr>
+<td>acima de 2</td>
+<td>339</td>
+<td><strong>17,7%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A primeira componente ordena o risco: a taxa de AVC cresce monotonicamente de 0,1% na faixa mais baixa para 17,7% na mais alta, uma diferença de mais de cem vezes. Mas as classes <strong>não são separáveis</strong>: quase metade dos casos de AVC está na mesma região da maioria dos pacientes sem AVC, e não existe nenhum agrupamento formado só por casos de AVC. O grupo isolado no alto do gráfico são os pacientes com doença cardíaca, separados pela segunda componente, e mesmo ali a maioria não teve AVC.</p>
+<p>O que isso significa para a modelagem: nenhuma combinação linear simples das features separa as classes, então o modelo vai precisar estimar probabilidades de risco em vez de traçar uma fronteira, e a escolha do limiar de decisão vai importar tanto quanto a escolha do algoritmo.</p>
+<h3 id="importancia-das-features">Importância das features<a class="headerlink" href="#importancia-das-features" title="Permanent link">&para;</a></h3>
+<p><img alt="Cargas das componentes" src="../img/pca_loadings.png" /></p>
+<p>As cargas mostram o peso de cada variável em cada componente:</p>
+<ul>
+<li><strong>PC1</strong> tem pesos positivos em todas as variáveis, com o maior na idade: é um eixo de "risco geral", que cresce junto com idade, glicose, IMC, hipertensão e doença cardíaca. Como é o eixo que ordena a taxa de AVC, a idade é a feature mais informativa.</li>
+<li><strong>PC2</strong> opõe doença cardíaca a IMC: separa os cardíacos do restante.</li>
+<li><strong>PC3</strong> é quase só glicose e <strong>PC4</strong> quase só hipertensão: essas duas variáveis carregam informação que não se mistura com as outras.</li>
+</ul>
+<p>Conclusão: a idade domina, mas glicose, hipertensão e doença cardíaca trazem informação própria, não redundante. É coerente com a análise exploratória, em que essas três elevam a taxa de AVC mesmo dentro da mesma faixa etária.</p>
+<h2 id="7-pipeline-de-pre-processamento">7. Pipeline de pré-processamento<a class="headerlink" href="#7-pipeline-de-pre-processamento" title="Permanent link">&para;</a></h2>
+<p><strong>Alternativa considerada.</strong> Aplicar as transformações uma a uma com pandas, salvando os resultados. Foi descartada por três motivos: é fácil vazar informação (calcular uma mediana no dataset inteiro, por exemplo); as mesmas transformações teriam de ser reescritas para aplicar a dados novos; e não funciona dentro de validação cruzada, em que o pré-processamento precisa ser refeito a cada dobra.</p>
+<p><strong>Decisão.</strong> Um ColumnTransformer do scikit-learn, que aplica cada tratamento à sua coluna, com Pipelines internos onde há mais de uma etapa:</p>
+<div class="highlight"><pre><span></span><code><span class="n">log</span> <span class="o">=</span> <span class="n">FunctionTransformer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">,</span> <span class="n">feature_names_out</span><span class="o">=</span><span class="s2">"one-to-one"</span><span class="p">)</span>
+<span class="n">limitar</span> <span class="o">=</span> <span class="n">FunctionTransformer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">,</span> <span class="n">kw_args</span><span class="o">=</span><span class="p">{</span><span class="s2">"a_min"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"a_max"</span><span class="p">:</span> <span class="mi">60</span><span class="p">},</span> <span class="n">feature_names_out</span><span class="o">=</span><span class="s2">"one-to-one"</span><span class="p">)</span>
+
+<span class="n">preprocessador</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">"idade"</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">(),</span> <span class="p">[</span><span class="s2">"age"</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s2">"glicose"</span><span class="p">,</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span> <span class="p">[</span><span class="s2">"avg_glucose_level"</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s2">"imc"</span><span class="p">,</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">limitar</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">"median"</span><span class="p">),</span> <span class="n">StandardScaler</span><span class="p">()),</span> <span class="p">[</span><span class="s2">"bmi"</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s2">"imc_ausente"</span><span class="p">,</span> <span class="n">MissingIndicator</span><span class="p">(),</span> <span class="p">[</span><span class="s2">"bmi"</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s2">"binarias"</span><span class="p">,</span> <span class="s2">"passthrough"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"hypertension"</span><span class="p">,</span> <span class="s2">"heart_disease"</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s2">"categoricas"</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="s2">"if_binary"</span><span class="p">,</span> <span class="n">handle_unknown</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">sparse_output</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+     <span class="p">[</span><span class="s2">"gender"</span><span class="p">,</span> <span class="s2">"ever_married"</span><span class="p">,</span> <span class="s2">"work_type"</span><span class="p">,</span> <span class="s2">"Residence_type"</span><span class="p">,</span> <span class="s2">"smoking_status"</span><span class="p">]),</span>
+<span class="p">],</span> <span class="n">verbose_feature_names_out</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">set_output</span><span class="p">(</span><span class="n">transform</span><span class="o">=</span><span class="s2">"pandas"</span><span class="p">)</span>
+
+<span class="n">X_train_prep</span> <span class="o">=</span> <span class="n">preprocessador</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test_prep</span> <span class="o">=</span> <span class="n">preprocessador</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Por que assim.</strong></p>
+<ul>
+<li><strong>fit_transform no treino, transform no teste:</strong> as medianas, médias, desvios e categorias são aprendidos uma única vez, no treino, e reutilizados. É o que garante que o teste não contamina nada.</li>
+<li><strong>A ordem dentro do IMC importa:</strong> primeiro o clipping, depois a imputação, depois a padronização. Se a imputação viesse antes, a mediana seria calculada com os valores errados; se a padronização viesse antes do clipping, o valor 97,6 distorceria a média e o desvio.</li>
+<li><strong>O indicador de ausência é um ramo separado</strong> porque precisa olhar o IMC original, antes da imputação.</li>
+<li><strong>Nomes de colunas preservados</strong> (saída em pandas): o resultado é legível e permite interpretar coeficientes e importâncias na APS2.</li>
+<li><strong>Reutilizável:</strong> o mesmo objeto pode ser encadeado com um classificador em um único Pipeline, e aí a validação cruzada refaz o pré-processamento dentro de cada dobra automaticamente.</li>
+</ul>
+<p><strong>Verificação.</strong> O resultado tem 18 features (3 contínuas, 1 indicador, 2 binárias, 12 do one-hot), nenhum valor ausente no treino nem no teste, e as contínuas com média 0 e desvio 1.</p>
+<p><strong>Por que 18 features não é problema.</strong> São 4.087 pacientes de treino para 18 colunas, mais de 200 por feature; a dimensionalidade só começa a pesar com centenas de colunas. O one-hot vira problema com variáveis de alta cardinalidade (dezenas de categorias), e aqui a maior tem cinco. Nem todas as 18 carregam sinal (gênero e residência não têm associação com o target, e as colunas de work_type são quase um proxy de idade), mas mantê-las custa pouco, e a regularização dos modelos lida com isso. O que vai limitar o modelo é a sobreposição das classes, não o número de features.</p>
+<h2 id="resumo-das-decisoes">Resumo das decisões<a class="headerlink" href="#resumo-das-decisoes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>Evidência na análise</th>
+<th>Decisão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IMC com 3,9% de nulos, não aleatórios</td>
+<td>19,9% de AVC entre quem não tem IMC</td>
+<td>imputar pela mediana e criar um indicador de ausência</td>
+</tr>
+<tr>
+<td>tabagismo desconhecido em 30% dos pacientes</td>
+<td>90% das crianças estão nessa categoria</td>
+<td>manter como categoria própria</td>
+</tr>
+<tr>
+<td>outliers de glicose (12%)</td>
+<td>são o grupo com glicose alta, com 13,5% de AVC</td>
+<td>manter e aplicar logaritmo</td>
+</tr>
+<tr>
+<td>IMC implausível (acima de 60)</td>
+<td>12 casos no treino, chegando a 97,6</td>
+<td>limitar a 60</td>
+</tr>
+<tr>
+<td>categóricas nominais</td>
+<td>nenhuma tem ordem natural</td>
+<td>one-hot encoding</td>
+</tr>
+<tr>
+<td>escalas diferentes</td>
+<td>idade até 82, glicose até 272</td>
+<td>padronização (média 0, desvio 1)</td>
+</tr>
+<tr>
+<td>PCA</td>
+<td>quatro componentes para 88% da variância; PC1 ordena o risco</td>
+<td>só para visualização; sem separação clara das classes</td>
+</tr>
+<tr>
+<td>pipeline</td>
+<td>evita vazamento e permite validação cruzada</td>
+<td>ColumnTransformer ajustado só no treino</td>
+</tr>
+<tr>
+<td>target raro (4,9%)</td>
+<td>prever sempre "não" acerta 95%</td>
+<td>split estratificado; na APS2, métricas para a classe rara</td>
+</tr>
+</tbody>
+</table>
+<h2 id="saidas-geradas">Saídas geradas<a class="headerlink" href="#saidas-geradas" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Conteúdo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data/processed/train.csv</td>
+<td>4.087 pacientes do treino, dados originais</td>
+</tr>
+<tr>
+<td>data/processed/test.csv</td>
+<td>1.022 pacientes do teste, dados originais</td>
+</tr>
+<tr>
+<td>data/processed/train_processed.csv</td>
+<td>treino após o pipeline: 18 features + stroke</td>
+</tr>
+<tr>
+<td>data/processed/test_processed.csv</td>
+<td>teste após o pipeline: 18 features + stroke</td>
+</tr>
+</tbody>
+</table>
+<p>Os arquivos não são versionados (o dataset é de uso educacional restrito), mas são regenerados ao executar os notebooks.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
