@@ -1,0 +1,48 @@
+site_name: Stroke Prediction — Projeto de Machine Learning
+site_description: Análise exploratória e pré-processamento do Stroke Prediction Dataset (APS de Machine Learning, Insper)
+site_url: https://mthperera.github.io/APS-ML/
+repo_url: https://github.com/mthperera/APS-ML
+repo_name: mthperera/APS-ML
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Modo escuro
+    - scheme: slate
+      primary: deep purple
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Modo claro
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - toc.follow
+    - content.code.copy
+
+plugins:
+  - search:
+      lang: pt
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+
+nav:
+  - Início: index.md
+  - Dataset: dataset.md
+  - Análise exploratória: eda.md
+  - Pré-processamento: preprocessing.md
