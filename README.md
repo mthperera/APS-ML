@@ -4,6 +4,9 @@ Projeto da disciplina de Machine Learning (Insper) com o [Stroke Prediction Data
 
 **Documentação completa:** https://mthperera.github.io/APS-ML/
 
+- **Aluno:** Matheus Henrique Pereira Borba
+- **Data da entrega (APS1):** 14/09/2026
+
 ## Estrutura do repositório
 
 ```text
