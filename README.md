@@ -2,10 +2,13 @@
 
 Projeto da disciplina de Machine Learning (Insper) com o [Stroke Prediction Dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset): 5.110 pacientes com dados clínicos, demográficos e de hábitos, e a indicação de quais tiveram AVC. O objetivo é construir um pipeline completo de Machine Learning para prever se um paciente teve AVC (classificação binária).
 
+**Resultado:** uma Random Forest sobre o pipeline da APS1 (sem gênero, residência e tipo de trabalho), com limiar escolhido para triagem, encontra 33 dos 50 AVCs do teste (recall 0,66), com ROC-AUC 0,835 e PR-AUC 0,214 (Dummy: 0,049).
+
 **Documentação completa:** https://mthperera.github.io/APS-ML/
 
 - **Aluno:** Matheus Henrique Pereira Borba
 - **Data da entrega (APS1):** 14/09/2026
+- **Data da entrega (APS2):** 27/10/2026
 
 ## Estrutura do repositório
 
@@ -16,9 +19,12 @@ APS-ML/
 │   ├── raw/                     CSV original baixado do Kaggle
 │   └── processed/               arquivos gerados pelos notebooks
 ├── docs/                        páginas e imagens do site de documentação (MkDocs)
+├── models/                      modelos ajustados, gerados pelo notebook 03
 ├── notebooks/
-│   ├── 01_eda.ipynb             análise exploratória (tarefas 1 a 3)
-│   └── 02_preprocessing.ipynb   pré-processamento (tarefa 4)
+│   ├── 01_eda.ipynb             APS1: análise exploratória (tarefas 1 a 3)
+│   ├── 02_preprocessing.ipynb   APS1: pré-processamento (tarefa 4)
+│   ├── 03_modeling.ipynb        APS2: modelagem (seção 1)
+│   └── 04_evaluation.ipynb      APS2: avaliação, interpretação e discussão (seções 2 a 4)
 ├── scripts/
 │   └── download_data.py         baixa o dataset do Kaggle para data/raw/
 ├── mkdocs.yml                   configuração do site de documentação
@@ -43,13 +49,19 @@ APS-ML/
 
 **notebooks/02_preprocessing.ipynb** lê o split salvo pelo 01 e aplica as decisões da análise: imputação do IMC com indicador de ausência, log na glicose, clipping no IMC, one-hot encoding, padronização, PCA e o pipeline final com ColumnTransformer do scikit-learn.
 
+**notebooks/03_modeling.ipynb** reaproveita o pipeline do 02 dentro de um `Pipeline` com cada modelo e cobre a seção 1 da APS2: escolha da métrica (PR-AUC) e da validação cruzada, Dummy, regressão logística com regularização (GridSearchCV) e Random Forest (RandomizedSearchCV), a mudança no pipeline com nova busca de hiperparâmetros, a curva de aprendizado e a escolha do limiar de decisão. Usa só o treino e salva os modelos em `models/modelos.joblib`.
+
+**notebooks/04_evaluation.ipynb** carrega os modelos e usa o teste pela primeira vez: métricas, matriz de confusão e curva ROC (seção 2); coeficientes da regressão logística, importâncias da Random Forest e SHAP (seção 3); e os números de apoio da discussão crítica, com as referências (seção 4).
+
+**models/** recebe `modelos.joblib`, gerado pelo notebook 03 e lido pelo 04. Não é versionado, como os dados.
+
 **scripts/download_data.py** baixa o CSV para `data/raw/` usando a biblioteca kagglehub. Não precisa de conta no Kaggle. Se o arquivo já existir, não baixa de novo.
 
-**docs/** e **mkdocs.yml** formam o site de documentação, com quatro páginas: início, dataset, análise exploratória e pré-processamento. As imagens em `docs/img/` são as figuras dos notebooks.
+**docs/** e **mkdocs.yml** formam o site de documentação, com oito páginas: início, dataset, análise exploratória, pré-processamento, modelagem, avaliação no teste, interpretação e discussão crítica. As imagens em `docs/img/` são as figuras dos notebooks.
 
 **.github/workflows/docs.yml** é o workflow que faz o build do site e o publica no GitHub Pages sempre que há um push na branch `main`.
 
-**requirements.txt** lista as bibliotecas dos notebooks (pandas, numpy, matplotlib, seaborn, scikit-learn, kagglehub, ipykernel). **requirements-docs.txt** lista as do site (mkdocs, mkdocs-material).
+**requirements.txt** lista as bibliotecas dos notebooks (pandas, numpy, matplotlib, seaborn, scikit-learn, shap, joblib, kagglehub, ipykernel). **requirements-docs.txt** lista as do site (mkdocs, mkdocs-material).
 
 ## Como rodar
 
@@ -80,9 +92,11 @@ Esse passo é opcional: se `data/raw/` estiver vazia, o notebook 01 faz o downlo
 Abra os notebooks no VS Code ou no Jupyter, selecione o kernel do ambiente `env` e execute na ordem:
 
 1. `notebooks/01_eda.ipynb`, que gera `data/processed/train.csv` e `test.csv`;
-2. `notebooks/02_preprocessing.ipynb`, que lê esses arquivos e gera `train_processed.csv` e `test_processed.csv`.
+2. `notebooks/02_preprocessing.ipynb`, que lê esses arquivos e gera `train_processed.csv` e `test_processed.csv`;
+3. `notebooks/03_modeling.ipynb`, que ajusta e compara os modelos e salva `models/modelos.joblib` (cerca de 4 minutos);
+4. `notebooks/04_evaluation.ipynb`, que avalia o modelo final no teste e o interpreta.
 
-Os dois são determinísticos (random_state = 42), então os resultados se repetem a cada execução.
+Todos são determinísticos (random_state = 42), então os resultados se repetem a cada execução.
 
 ### 4. Ver a documentação localmente
 
