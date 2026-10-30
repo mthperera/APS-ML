@@ -209,3 +209,6 @@ __marimo__/
 # Datasets locais (baixados/gerados pelos notebooks)
 data/raw/*.csv
 data/processed/*.csv
+
+# Modelos ajustados (gerados pelo notebook 03)
+models/*.joblib
