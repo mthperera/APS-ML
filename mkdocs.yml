@@ -1,5 +1,5 @@
 site_name: Stroke Prediction — Projeto de Machine Learning
-site_description: Análise exploratória e pré-processamento do Stroke Prediction Dataset (APS de Machine Learning, Insper)
+site_description: Análise exploratória, pré-processamento e modelagem do Stroke Prediction Dataset (APS de Machine Learning, Insper)
 site_url: https://mthperera.github.io/APS-ML/
 repo_url: https://github.com/mthperera/APS-ML
 repo_name: mthperera/APS-ML
@@ -46,3 +46,7 @@ nav:
   - Dataset: dataset.md
   - Análise exploratória: eda.md
   - Pré-processamento: preprocessing.md
+  - Modelagem: modeling.md
+  - Avaliação no teste: evaluation.md
+  - Interpretação: interpretation.md
+  - Discussão crítica: discussion.md
