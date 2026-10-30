@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://mthperera.github.io/APS-ML/</loc>
+         <lastmod>2026-10-30</lastmod>
+    </url>
+    <url>
+         <loc>https://mthperera.github.io/APS-ML/dataset/</loc>
+         <lastmod>2026-10-30</lastmod>
+    </url>
+    <url>
+         <loc>https://mthperera.github.io/APS-ML/discussion/</loc>
+         <lastmod>2026-10-30</lastmod>
+    </url>
+    <url>
+         <loc>https://mthperera.github.io/APS-ML/eda/</loc>
+         <lastmod>2026-10-30</lastmod>
+    </url>
+    <url>
+         <loc>https://mthperera.github.io/APS-ML/evaluation/</loc>
+         <lastmod>2026-10-30</lastmod>
+    </url>
+    <url>
+         <loc>https://mthperera.github.io/APS-ML/interpretation/</loc>
+         <lastmod>2026-10-30</lastmod>
+    </url>
+    <url>
+         <loc>https://mthperera.github.io/APS-ML/modeling/</loc>
+         <lastmod>2026-10-30</lastmod>
+    </url>
+    <url>
+         <loc>https://mthperera.github.io/APS-ML/preprocessing/</loc>
+         <lastmod>2026-10-30</lastmod>
+    </url>
+</urlset>

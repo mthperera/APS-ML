@@ -1,0 +1,1191 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Análise exploratória, pré-processamento e modelagem do Stroke Prediction Dataset (APS de Machine Learning, Insper)">
+      
+      
+      
+        <link rel="canonical" href="https://mthperera.github.io/APS-ML/discussion/">
+      
+      
+        <link rel="prev" href="../interpretation/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Discussão crítica - Stroke Prediction — Projeto de Machine Learning</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#discussao-critica" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Stroke Prediction — Projeto de Machine Learning" class="md-header__button md-logo" aria-label="Stroke Prediction — Projeto de Machine Learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Stroke Prediction — Projeto de Machine Learning
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Discussão crítica
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-orange"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="deep-orange"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mthperera/APS-ML" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mthperera/APS-ML
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../dataset/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Dataset
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../eda/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Análise exploratória
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../preprocessing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Pré-processamento
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../modeling/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Modelagem
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../evaluation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Avaliação no teste
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../interpretation/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Interpretação
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Discussão crítica
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Stroke Prediction — Projeto de Machine Learning" class="md-nav__button md-logo" aria-label="Stroke Prediction — Projeto de Machine Learning" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Stroke Prediction — Projeto de Machine Learning
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mthperera/APS-ML" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mthperera/APS-ML
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dataset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dataset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Análise exploratória
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preprocessing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pré-processamento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modelagem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Avaliação no teste
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interpretation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interpretação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussão crítica
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussão crítica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#limitacoes-do-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitações do modelo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limitações do modelo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-o-modelo-depende-de-um-sinal-que-nao-se-repete-no-teste" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. O modelo depende de um sinal que não se repete no teste
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-o-ponto-de-operacao-so-vale-para-a-prevalencia-desta-amostra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. O ponto de operação só vale para a prevalência desta amostra
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitacoes-dos-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitações dos dados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limitações dos dados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-os-dados-sao-transversais-o-target-e-historico-de-avc-nao-avc-futuro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Os dados são transversais: o target é histórico de AVC, não AVC futuro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-faltam-fatores-de-risco-centrais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Faltam fatores de risco centrais
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacionalizacao-e-manutencao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operacionalização e manutenção
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Operacionalização e manutenção">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-monitorar-entradas-e-desempenho-com-recalibracao-e-re-treino-programados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Monitorar entradas e desempenho, com recalibração e re-treino programados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-versionar-o-pipeline-como-um-artefato-unico-com-um-model-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Versionar o pipeline como um artefato único, com um model card
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#limitacoes-do-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitações do modelo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limitações do modelo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-o-modelo-depende-de-um-sinal-que-nao-se-repete-no-teste" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. O modelo depende de um sinal que não se repete no teste
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-o-ponto-de-operacao-so-vale-para-a-prevalencia-desta-amostra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. O ponto de operação só vale para a prevalência desta amostra
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitacoes-dos-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitações dos dados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limitações dos dados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-os-dados-sao-transversais-o-target-e-historico-de-avc-nao-avc-futuro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Os dados são transversais: o target é histórico de AVC, não AVC futuro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-faltam-fatores-de-risco-centrais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Faltam fatores de risco centrais
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operacionalizacao-e-manutencao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operacionalização e manutenção
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Operacionalização e manutenção">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-monitorar-entradas-e-desempenho-com-recalibracao-e-re-treino-programados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Monitorar entradas e desempenho, com recalibração e re-treino programados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-versionar-o-pipeline-como-um-artefato-unico-com-um-model-card" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Versionar o pipeline como um artefato único, com um model card
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="discussao-critica">Discussão crítica<a class="headerlink" href="#discussao-critica" title="Permanent link">&para;</a></h1>
+<p>Seção 4 da APS2. Os números de apoio são calculados no <a href="https://github.com/mthperera/APS-ML/blob/main/notebooks/04_evaluation.ipynb">notebook 04</a>.</p>
+<h2 id="limitacoes-do-modelo">Limitações do modelo<a class="headerlink" href="#limitacoes-do-modelo" title="Permanent link">&para;</a></h2>
+<h3 id="1-o-modelo-depende-de-um-sinal-que-nao-se-repete-no-teste">1. O modelo depende de um sinal que não se repete no teste<a class="headerlink" href="#1-o-modelo-depende-de-um-sinal-que-nao-se-repete-no-teste" title="Permanent link">&para;</a></h3>
+<p>O indicador de IMC ausente, criado na APS1 porque a falta do IMC estava associada ao AVC, é a 3ª feature mais importante da floresta. Na validação cruzada, tirá-lo derrubava a PR-AUC de 0,264 para 0,195 (<a href="../modeling/#5-mudanca-no-pipeline">Modelagem</a>). No teste, o sinal quase desaparece:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Pacientes sem IMC</th>
+<th>AVC entre eles</th>
+<th>Taxa de AVC sem IMC</th>
+<th>Taxa de AVC com IMC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Treino</td>
+<td>163</td>
+<td>37</td>
+<td><strong>22,7%</strong></td>
+<td>4,1%</td>
+</tr>
+<tr>
+<td>Teste</td>
+<td>38</td>
+<td>3</td>
+<td><strong>7,9%</strong></td>
+<td>4,8%</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Para esses 38 pacientes, o modelo prevê em média 13,8% de AVC, quase o dobro do real, e sinaliza 24 deles.</li>
+<li>Como diagnóstico, a mesma floresta sem o indicador, treinada no treino, teria PR-AUC de <strong>0,264 no teste</strong>, contra 0,214 com ele. Isso explica a maior parte da queda entre validação cruzada (0,269) e teste.</li>
+<li><strong>O modelo final não é trocado por causa disso:</strong> escolher o pipeline sem o indicador agora seria selecionar modelo pelo teste, e o 0,264 deixaria de ser uma estimativa honesta. Com só 163 pacientes sem IMC no treino, a diferença pode ser em parte acaso, mas um sinal tão forte, sem explicação clínica e instável entre amostras, não deveria sustentar um modelo em produção. A próxima versão deveria ser desenvolvida sem o indicador, ou com ele validado em dados novos.</li>
+</ul>
+<h3 id="2-o-ponto-de-operacao-so-vale-para-a-prevalencia-desta-amostra">2. O ponto de operação só vale para a prevalência desta amostra<a class="headerlink" href="#2-o-ponto-de-operacao-so-vale-para-a-prevalencia-desta-amostra" title="Permanent link">&para;</a></h3>
+<p>Recall e especificidade são propriedades do modelo, mas a precisão depende da proporção de AVC na população. Mantendo o recall (0,660) e a especificidade (0,838) do teste, pelo teorema de Bayes:</p>
+<table>
+<thead>
+<tr>
+<th>Prevalência</th>
+<th>Precisão</th>
+<th>Alertas por caso de AVC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4,9% (esta amostra)</td>
+<td>0,174</td>
+<td>5,8</td>
+</tr>
+<tr>
+<td>2%</td>
+<td>0,077</td>
+<td>13</td>
+</tr>
+<tr>
+<td>1%</td>
+<td>0,040</td>
+<td>25</td>
+</tr>
+<tr>
+<td>0,5%</td>
+<td>0,020</td>
+<td>50</td>
+</tr>
+<tr>
+<td>0,15% (incidência anual global)</td>
+<td>0,006</td>
+<td>164</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Curva de calibração" src="../img/calibration_curve.png" /></p>
+<p>Nesta amostra, as probabilidades são razoavelmente calibradas: na faixa mais alta o modelo prevê 0,14 para uma fração real de 0,175. Mas essa calibração está presa à prevalência de 4,9%, que mostra que a amostra não é uma população geral: na população, com cerca de 150 AVCs por 100 mil pessoas por ano (Feigin et al., 2021), o mesmo modelo emitiria mais de 160 alertas por caso, e as probabilidades ficariam superestimadas (Van Calster et al., 2019). Usar o modelo em outra população exige recalibrar as probabilidades e escolher de novo o limiar com dados dessa população.</p>
+<h2 id="limitacoes-dos-dados">Limitações dos dados<a class="headerlink" href="#limitacoes-dos-dados" title="Permanent link">&para;</a></h2>
+<h3 id="1-os-dados-sao-transversais-o-target-e-historico-de-avc-nao-avc-futuro">1. Os dados são transversais: o target é histórico de AVC, não AVC futuro<a class="headerlink" href="#1-os-dados-sao-transversais-o-target-e-historico-de-avc-nao-avc-futuro" title="Permanent link">&para;</a></h3>
+<p>Não há datas, então não se sabe se hipertensão, glicose, IMC ou tabagismo foram medidos antes ou depois do AVC. Quem teve AVC pode ter passado a tratar a pressão, mudado a dieta ou parado de fumar ("ex-fumante" pode ser consequência). O modelo aprende associações com quem <em>teve</em> AVC, não fatores que o <em>precedem</em>, e não pode ser usado como previsão de risco futuro. Para isso são necessários dados longitudinais, como os da coorte de Framingham, base dos escores clássicos de risco de AVC (Wolf et al., 1991). A instabilidade do IMC ausente é compatível com isso: a falta de um peso medido pode refletir como cada paciente chegou ao registro (por exemplo, internado após o AVC), e não uma característica dele.</p>
+<h3 id="2-faltam-fatores-de-risco-centrais">2. Faltam fatores de risco centrais<a class="headerlink" href="#2-faltam-fatores-de-risco-centrais" title="Permanent link">&para;</a></h3>
+<p>O estudo INTERSTROKE identificou dez fatores de risco modificáveis responsáveis por cerca de 90% do risco populacional de AVC: hipertensão, atividade física, relação ApoB/ApoA1, dieta, relação cintura-quadril, fatores psicossociais, tabagismo, causas cardíacas (como fibrilação atrial), álcool e diabetes (O'Donnell et al., 2016). O dataset tem versões grosseiras de poucos deles:</p>
+<table>
+<thead>
+<tr>
+<th>Fator de risco</th>
+<th>No dataset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hipertensão</td>
+<td>só sim/não, sem a pressão medida</td>
+</tr>
+<tr>
+<td>causas cardíacas</td>
+<td>"doença cardíaca" genérica, sem distinguir fibrilação atrial</td>
+</tr>
+<tr>
+<td>diabetes</td>
+<td>glicose média, sem diagnóstico</td>
+</tr>
+<tr>
+<td>obesidade abdominal</td>
+<td>IMC, em vez da relação cintura-quadril</td>
+</tr>
+<tr>
+<td>colesterol, atividade física, dieta, álcool, estresse</td>
+<td>ausentes</td>
+</tr>
+</tbody>
+</table>
+<p>Isso explica o teto visto na curva de aprendizado (o modelo fica em 0,45 de PR-AUC até no treino) e os falsos negativos sem nenhum fator registrado.</p>
+<h2 id="operacionalizacao-e-manutencao">Operacionalização e manutenção<a class="headerlink" href="#operacionalizacao-e-manutencao" title="Permanent link">&para;</a></h2>
+<h3 id="1-monitorar-entradas-e-desempenho-com-recalibracao-e-re-treino-programados">1. Monitorar entradas e desempenho, com recalibração e re-treino programados<a class="headerlink" href="#1-monitorar-entradas-e-desempenho-com-recalibracao-e-re-treino-programados" title="Permanent link">&para;</a></h3>
+<p>Em produção, a distribuição das entradas muda (outra população, novos protocolos de coleta) e o desempenho cai sem aviso; é um dos principais custos ocultos de sistemas de ML (Sculley et al., 2015). Na prática:</p>
+<ul>
+<li>comparar todo mês a distribuição de cada feature com a do treino, por testes univariados (Kolmogorov-Smirnov nas contínuas, qui-quadrado nas categóricas, com correção de Bonferroni), que Rabanser et al. (2019) mostraram ser um detector de mudança simples e eficaz. A taxa de IMC ausente e a taxa de AVC nesse grupo merecem alarme próprio;</li>
+<li>acompanhar a taxa de alertas (19% no teste): uma mudança brusca indica mudança na população ou no fluxo de dados antes mesmo de os desfechos chegarem;</li>
+<li>quando os desfechos reais chegarem, recalcular recall, precisão e calibração; abaixo de um recall mínimo acordado (por exemplo, 53%, o limite inferior do intervalo de confiança do teste), recalibrar ou retreinar com os dados novos.</li>
+</ul>
+<h3 id="2-versionar-o-pipeline-como-um-artefato-unico-com-um-model-card">2. Versionar o pipeline como um artefato único, com um model card<a class="headerlink" href="#2-versionar-o-pipeline-como-um-artefato-unico-com-um-model-card" title="Permanent link">&para;</a></h3>
+<p>O objeto salvo pelo notebook 03 já reúne pré-processamento, modelo e limiar. Ele deve ser versionado junto com os dados e o código que o geraram, para que toda predição seja rastreável a uma versão e um re-treino possa ser desfeito. Cada versão deve vir com um model card (Mitchell et al., 2019) que registre a população em que o modelo vale, as métricas com intervalos de confiança, o limiar e o motivo da escolha, e as limitações desta página.</p>
+<h2 id="referencias">Referências<a class="headerlink" href="#referencias" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Bergstra, J., &amp; Bengio, Y. (2012). Random search for hyper-parameter optimization. <em>Journal of Machine Learning Research</em>, 13, 281–305.</li>
+<li>Breiman, L. (2001). Random forests. <em>Machine Learning</em>, 45(1), 5–32.</li>
+<li>Cawley, G. C., &amp; Talbot, N. L. C. (2010). On over-fitting in model selection and subsequent selection bias in performance evaluation. <em>Journal of Machine Learning Research</em>, 11, 2079–2107.</li>
+<li>Collins, G. S., Ogundimu, E. O., &amp; Altman, D. G. (2016). Sample size considerations for the external validation of a multivariable prognostic model: a resampling study. <em>Statistics in Medicine</em>, 35(2), 214–226.</li>
+<li>fedesoriano (2021). <em>Stroke Prediction Dataset</em>. Kaggle. https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset</li>
+<li>Feigin, V. L. et al. (GBD 2019 Stroke Collaborators) (2021). Global, regional, and national burden of stroke and its risk factors, 1990–2019: a systematic analysis for the Global Burden of Disease Study 2019. <em>The Lancet Neurology</em>, 20(10), 795–820.</li>
+<li>Lundberg, S. M., &amp; Lee, S.-I. (2017). A unified approach to interpreting model predictions. <em>Advances in Neural Information Processing Systems</em>, 30.</li>
+<li>Lundberg, S. M., Erion, G., Chen, H. et al. (2020). From local explanations to global understanding with explainable AI for trees. <em>Nature Machine Intelligence</em>, 2(1), 56–67.</li>
+<li>Mitchell, M. et al. (2019). Model cards for model reporting. <em>Proceedings of the Conference on Fairness, Accountability, and Transparency (FAT* '19)</em>, 220–229.</li>
+<li>Nadeau, C., &amp; Bengio, Y. (2003). Inference for the generalization error. <em>Machine Learning</em>, 52(3), 239–281.</li>
+<li>O'Donnell, M. J. et al. (2016). Global and regional effects of potentially modifiable risk factors associated with acute stroke in 32 countries (INTERSTROKE): a case-control study. <em>The Lancet</em>, 388(10046), 761–775.</li>
+<li>Pedregosa, F. et al. (2011). Scikit-learn: machine learning in Python. <em>Journal of Machine Learning Research</em>, 12, 2825–2830.</li>
+<li>Rabanser, S., Günnemann, S., &amp; Lipton, Z. C. (2019). Failing loudly: an empirical study of methods for detecting dataset shift. <em>Advances in Neural Information Processing Systems</em>, 32.</li>
+<li>Saito, T., &amp; Rehmsmeier, M. (2015). The precision-recall plot is more informative than the ROC plot when evaluating binary classifiers on imbalanced datasets. <em>PLoS ONE</em>, 10(3), e0118432.</li>
+<li>Sculley, D. et al. (2015). Hidden technical debt in machine learning systems. <em>Advances in Neural Information Processing Systems</em>, 28, 2503–2511.</li>
+<li>Strobl, C., Boulesteix, A.-L., Zeileis, A., &amp; Hothorn, T. (2007). Bias in random forest variable importance measures: illustrations, sources and a solution. <em>BMC Bioinformatics</em>, 8, 25.</li>
+<li>Tibshirani, R. (1996). Regression shrinkage and selection via the lasso. <em>Journal of the Royal Statistical Society: Series B</em>, 58(1), 267–288.</li>
+<li>Van Calster, B., McLernon, D. J., van Smeden, M., Wynants, L., &amp; Steyerberg, E. W. (2019). Calibration: the Achilles heel of predictive analytics. <em>BMC Medicine</em>, 17, 230.</li>
+<li>van Rijsbergen, C. J. (1979). <em>Information Retrieval</em> (2ª ed.). Butterworths.</li>
+<li>Wolf, P. A., D'Agostino, R. B., Belanger, A. J., &amp; Kannel, W. B. (1991). Probability of stroke: a risk profile from the Framingham Study. <em>Stroke</em>, 22(3), 312–318.</li>
+<li>Zou, H., &amp; Hastie, T. (2005). Regularization and variable selection via the elastic net. <em>Journal of the Royal Statistical Society: Series B</em>, 67(2), 301–320.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>
