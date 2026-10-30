@@ -92,7 +92,7 @@ Os cinco candidatos reavaliados em 25 dobras novas:
 | Random Forest, padrão | 1,000 | 0,186 | 0,041 | 0,814 |
 | **Random Forest, ajustada** | 0,455 | **0,258** | 0,059 | 0,851 |
 
-A **Random Forest ajustada é o melhor modelo**. A busca rendeu +0,072 para ela e nada para a regressão logística, que não estava sobreajustada. As duas empatam em ROC-AUC; a PR-AUC, que olha para a classe rara, é que as separa. A vantagem (0,033) é menor que o desvio entre dobras: existe na média, mas é modesta.
+A **Random Forest ajustada é o melhor modelo**. A busca rendeu +0,072 para ela e nada para a regressão logística, que não estava sobreajustada. As duas empatam em ROC-AUC; a PR-AUC, que olha para a classe rara, é que as separa. A vantagem (0,033) é menor que o desvio entre dobras: a escolha segue a métrica definida, mas é modesta, e a regressão logística continua como referência na [avaliação no teste](evaluation.md).
 
 ## 5. Mudança no pipeline
 
@@ -106,7 +106,7 @@ A **Random Forest ajustada é o melhor modelo**. A busca rendeu +0,072 para ela 
 
 O estado civil fica, porque acima dos 60 anos ainda mostra diferença (20,0% contra 12,7%), e o tabagismo fica, porque a categoria desconhecida carrega informação.
 
-**Por que deve ajudar a floresta:** com `max_features="sqrt"`, cada divisão sorteia 4 das 18 colunas, e as 7 colunas dessas variáveis são 39% delas. Muitas divisões só têm ruído ou proxies de idade como opção. Com 11 colunas, a raiz sorteia 3, todas com sinal.
+**Por que pode ajudar a floresta:** com `max_features="sqrt"`, cada divisão sorteia 4 das 18 colunas, e as 7 colunas dessas variáveis são 39% delas. Muitas divisões só têm ruído ou proxies de idade como opção. Com 11 colunas, a raiz sorteia 3, todas com sinal. Mesmo sem ganho, o modelo fica mais simples.
 
 **Ablação** (hiperparâmetros da seção 3 fixos):
 
@@ -116,26 +116,36 @@ O estado civil fica, porque acima dos 60 anos ainda mostra diferença (20,0% con
 | − gender, Residence_type | 0,261 |
 | **− gender, Residence_type, work_type (proposta, 11 features)** | **0,264** |
 | − gender, Residence_type, work_type, ever_married | 0,259 |
+| proposta − indicador de IMC ausente | 0,195 |
+
+As remoções da proposta melhoram um pouco, menos que o desvio entre dobras (~0,035). A última linha mede, por contraste, o peso do **indicador de IMC ausente**: sem ele, a PR-AUC cai para 0,195, quase um terço do ganho sobre o Dummy. Ele é mantido, porque a decisão da APS1 se baseou no treino (22,7% de AVC entre quem não tem IMC), mas essa dependência é um risco, confirmado no teste (ver [Discussão crítica](discussion.md#1-o-modelo-depende-de-um-sinal-que-nao-se-repete-no-teste)).
 
 **Nova seleção de hiperparâmetros**, com mesma métrica, mesmo espaço, mesmo número de sorteios e mesmas dobras: a busca chega aos mesmos hiperparâmetros e a PR-AUC sobe de 0,254 para 0,264 nas dobras da busca e de **0,258 para 0,269** nas dobras novas.
 
-![Ganho por dobra](img/pipeline_change_gain.png)
+![Diferença por dobra](img/pipeline_change_gain.png)
 
-Como os dois pipelines são avaliados nas mesmas 25 dobras, a comparação é pareada: o novo vence em **80% delas**. O ganho é pequeno, como se espera de uma mudança que só tira ruído, e vem com um modelo mais simples: 11 features em vez de 18, três campos a menos para coletar. **O pipeline novo é adotado.**
+**O ganho não é estatisticamente significativo.** O pipeline novo vence em 80% das 25 dobras, e o teste t comum dá p = 0,001, mas dobras repetidas compartilham pacientes e não são independentes. Com o teste t corrigido de Nadeau & Bengio (2003), **p = 0,18: empate técnico**.
+
+**O pipeline novo é adotado por parcimônia, não por ganho:** com desempenho equivalente, fica o modelo com 11 features em vez de 18, mais simples de explicar e com três campos a menos para coletar.
 
 ## 6. Curva de aprendizado
+
+A curva usa as dobras novas (5 × 5), que a busca não viu, para o último ponto não ficar otimista.
 
 ![Curva de aprendizado](img/learning_curve.png)
 
 | Pacientes no treino | Casos de AVC | PR-AUC treino | PR-AUC validação |
 |---|---|---|---|
-| 326 | ~16 | 0,692 | 0,186 |
-| 980 | ~48 | 0,587 | 0,221 |
-| 1.634 | ~80 | 0,530 | 0,242 |
-| 2.288 | ~111 | 0,494 | 0,258 |
-| 3.269 | ~159 | 0,447 | 0,268 |
+| 326 | ~16 | 0,689 | 0,178 |
+| 980 | ~48 | 0,577 | 0,215 |
+| 1.634 | ~80 | 0,520 | 0,234 |
+| 2.288 | ~111 | 0,486 | 0,251 |
+| 3.269 | ~159 | 0,448 | 0,265 |
 
-A curva de treino cai e a de validação sobe sem estabilizar. A distância entre elas diminui (de 0,51 para 0,18), mas continua grande: o problema é **variância, não viés**. O modelo é limitado pela quantidade de casos de AVC, não pela capacidade; mais dados, especialmente mais casos positivos, devem melhorar a validação. Aumentar a complexidade não ajudaria: a busca mostrou que árvores mais profundas pioram.
+- A validação sobe, mas desacelera: de 70% para 100% dos dados o ganho é de só 0,014.
+- **Há variância e viés ao mesmo tempo.** A distância entre as curvas (0,18 no fim) mostra sobreajuste residual. Mas o próprio treino fica em 0,45: mesmo nos dados que viu, o modelo está longe de separar as classes. Parte disso é a profundidade limitada, escolhida de propósito, e parte é o pouco sinal das features, como a APS1 já indicava.
+
+Conclusão: mais dados ajudariam pouco, e mais complexidade já se mostrou pior na busca. O ganho maior viria de features com mais informação clínica (ver [Discussão crítica](discussion.md)).
 
 ## 7. Limiar de decisão
 
@@ -149,7 +159,7 @@ O limiar padrão de 0,5 não serve: a floresta quase nunca prevê probabilidades
 | 0,125 (máximo F1) | 10,6% | 0,226 | 0,492 | 0,310 | 0,399 |
 | **0,090 (máximo F2)** | 18,1% | 0,181 | **0,673** | 0,285 | **0,436** |
 
-O limiar é escolhido com previsões fora da dobra no treino, sem tocar no teste. O F2 é quase plano entre 0,06 e 0,12, então a escolha não depende de um ponto exato.
+O limiar é escolhido com previsões fora da dobra no treino, sem tocar no teste. O F2 é quase plano entre 0,06 e 0,12, então a escolha não depende de um ponto exato. Ressalva: o limiar vem de modelos treinados em 80% do treino e é aplicado ao modelo reajustado com 100%, cujas probabilidades podem mudar um pouco de escala; o teste confirma que recall e precisão se mantiveram (0,66 e 0,17).
 
 ## Modelo final
 
@@ -161,6 +171,7 @@ Random Forest (300 árvores, profundidade 5, folhas de 5, raiz das features) sob
 | Dummy | 0,049 |
 | Regressão logística | 0,225; a regularização quase não importa |
 | Random Forest | de 0,186 para 0,258 com a busca |
-| Mudança no pipeline | de 0,258 para 0,269, melhora em 80% das dobras |
-| Curva de aprendizado | limitado por dados, não por capacidade |
+| Mudança no pipeline | de 0,258 para 0,269, empate técnico (p = 0,18 no teste corrigido); adotada por parcimônia |
+| Dependência do IMC ausente | sem o indicador, de 0,264 para 0,195 |
+| Curva de aprendizado | variância e viés; mais dados ajudam pouco, features melhores ajudariam mais |
 | Limiar | 0,090: recall de 67% e precisão de 18% na validação |

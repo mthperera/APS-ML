@@ -2,13 +2,13 @@
 
 Projeto da disciplina de Machine Learning (Insper) com o [Stroke Prediction Dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset): 5.110 pacientes com dados clínicos, demográficos e de hábitos, e a indicação de quais tiveram AVC. O objetivo é construir um pipeline completo de Machine Learning para prever se um paciente teve AVC (classificação binária).
 
-**Resultado:** uma Random Forest sobre o pipeline da APS1 (sem gênero, residência e tipo de trabalho), com limiar escolhido para triagem, encontra 33 dos 50 AVCs do teste (recall 0,66), com ROC-AUC 0,835 e PR-AUC 0,214 (Dummy: 0,049).
+**Resultado:** uma Random Forest sobre o pipeline da APS1 (sem gênero, residência e tipo de trabalho), com limiar escolhido para triagem, encontra 33 dos 50 AVCs do teste (recall 0,66), com ROC-AUC 0,835 e PR-AUC 0,214 (Dummy: 0,049). No teste, a regressão logística empata com ela.
 
 **Documentação completa:** https://mthperera.github.io/APS-ML/
 
 - **Aluno:** Matheus Henrique Pereira Borba
 - **Data da entrega (APS1):** 14/09/2026
-- **Data da entrega (APS2):** 27/10/2026
+- **Data da entrega (APS2):** 30/10/2026
 
 ## Estrutura do repositório
 
